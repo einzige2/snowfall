@@ -1,0 +1,16 @@
+[package]
+name = "snowfall"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+bevy = { version = "0.15.3", default-features = true }
+wasm-bindgen = "0.2.93"
+# logging
+log = "0.4.6"
+env_logger = "0.11.5"
+# crypto
+sha1_smol = "1.0.1"
+base64 = "0.22.1"
+# random
+noise = "0.9"
