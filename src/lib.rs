@@ -73,6 +73,6 @@ fn input_handler(
 
     // MOVE RIGHT
     if keyboard_input.pressed(KeyCode::KeyD) || keyboard_input.pressed(KeyCode::ArrowRight) {
-        camera_transform.translation += -left * time.delta().as_secs_f33() * movement_speed;
+        camera_transform.translation += -left * time.delta().as_secs_f32() * movement_speed;
     }
 }
