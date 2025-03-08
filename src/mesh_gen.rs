@@ -34,8 +34,8 @@ pub fn generate_terrain(size: f32, resolution: TerrainResolution) -> Mesh {
 
     let perlin: Perlin = Perlin::new(SEED);
     let mut vertices: Vec<[f32; 3]> = Vec::new();
-    for z in 0..res - 1 {
-        for x in 0..res - 1 {
+    for z in 0..res {
+        for x in 0..res {
             let vx = x as f32 * step;
             let vz = z as f32 * step;
             vertices.push([
@@ -56,34 +56,39 @@ pub fn generate_terrain(size: f32, resolution: TerrainResolution) -> Mesh {
     // TRIANGLES
 
     let mut triangles: Vec<u32> = Vec::new();
-    for n in 0..((res - 2) * (res - 2)) {
-        // each iteration of this loop will be one quad in the overall terrain
 
-        // first triangle
-        // 1    2
-        // ------
-        // |   /
-        // |  /
-        // | /
-        // |/
-        // 0
+    for z in 0..(res - 1) {
+        for x in 0..(res - 1) {
+            // each iteration of this loop will be one quad in the overall terrain
 
-        triangles.push(n);
-        triangles.push(n + res);
-        triangles.push(n + res + 1);
+            let root = z * res + x;
 
-        // second triangle
-        //      1
-        //     /|
-        //    / |
-        //   /  |
-        //  /   |
-        // ------
-        // 0    2
+            // first triangle
+            // 1    2
+            // ------
+            // |   /
+            // |  /
+            // | /
+            // |/
+            // 0
 
-        triangles.push(n);
-        triangles.push(n + res + 1);
-        triangles.push(n + 1);
+            triangles.push(root);
+            triangles.push(root + res);
+            triangles.push(root + res + 1);
+
+            // second triangle
+            //      1
+            //     /|
+            //    / |
+            //   /  |
+            //  /   |
+            // ------
+            // 0    2
+
+            triangles.push(root);
+            triangles.push(root + res + 1);
+            triangles.push(root + 1);
+        }
     }
 
     let mut terrain = Mesh::new(
