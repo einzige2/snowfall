@@ -11,6 +11,15 @@ pub enum TerrainResolution {
     HIGH = 1024,
 }
 
+#[derive(Event)]
+pub enum TerrainEvent {
+    Generate,
+    SetResolution(TerrainResolution),
+    SetSize(f64),
+    SetFrequency(f64),
+    SetAmplitude(f64),
+}
+
 const NOISE_SEED: u32 = 42;
 const NOISE_FREQUENCY: f64 = 4.0;
 const NOISE_AMPLITUDE: f64 = 24.0;

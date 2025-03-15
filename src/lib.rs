@@ -1,4 +1,7 @@
+// custom
 use crate::mesh_gen::{TerrainResolution, generate_terrain};
+use crate::ui::setup_ui;
+// bevy
 use bevy::{
     app::AppExit,
     input::mouse::MouseMotion,
@@ -7,11 +10,12 @@ use bevy::{
 };
 
 pub mod mesh_gen;
+pub mod ui;
 
 pub fn run() {
     App::new()
         .add_plugins(DefaultPlugins)
-        .add_systems(Startup, setup)
+        .add_systems(Startup, (setup, setup_ui))
         .add_systems(Update, input_handler)
         .run();
 }
