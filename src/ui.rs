@@ -1,38 +1,36 @@
-use bevy::{color::palettes::basic::*, prelude::*};
+use crate::mesh_gen::TerrainEventType;
+use bevy::prelude::*;
 
 const BASE_GAP: f32 = 16.0;
 
-#[derive(Clone)]
-pub enum TerrainButtonType {
-    Generate,
-    SetResolution,
-}
-
 #[derive(Clone, Component)]
 pub struct TerrainButton<'a> {
-    pub button_type: TerrainButtonType,
+    pub event: TerrainEventType,
     pub text: &'a str,
-}
-
-impl<'a> TerrainButton<'a> {
-    pub fn on_click(&self) {
-        match self.button_type {
-            TerrainButtonType::Generate => println!("Generate clicked!"),
-            TerrainButtonType::SetResolution => println!("Set Resolution clicked!"),
-        }
-    }
 }
 
 const TERRAIN_BUTTONS: [TerrainButton; 2] = [
     TerrainButton {
-        button_type: TerrainButtonType::Generate,
+        event: TerrainEventType::Generate,
         text: "Generate Terrain",
     },
     TerrainButton {
-        button_type: TerrainButtonType::Generate,
+        event: TerrainEventType::SetResolution,
         text: "Set Resolution",
     },
 ];
+
+impl<'a> TerrainButton<'a> {
+    fn on_click(&self) {
+        match self.event {
+            TerrainEventType::Generate => println!("Generate clicked!"),
+            TerrainEventType::SetResolution => println!("Generate clicked!"),
+            TerrainEventType::SetSize => println!("Generate clicked!"),
+            TerrainEventType::SetFrequency => println!("Set Frequency clicked!"),
+            TerrainEventType::SetAmplitude => println!("Generate clicked!"),
+        }
+    }
+}
 
 pub fn setup_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
     let mut ui_root = commands.spawn(Node {

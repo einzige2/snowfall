@@ -5,6 +5,7 @@ edition = "2024"
 
 [dependencies]
 bevy = { version = "0.15.3", default-features = true }
+bevy_hanabi = "0.14"
 wasm-bindgen = "0.2.93"
 # logging
 log = "0.4.6"

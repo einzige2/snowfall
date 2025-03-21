@@ -1,6 +1,6 @@
 // custom
 use crate::mesh_gen::{TerrainResolution, generate_terrain};
-use crate::ui::setup_ui;
+use crate::vfx::snow::setup_snow;
 // bevy
 use bevy::{
     app::AppExit,
@@ -8,14 +8,17 @@ use bevy::{
     prelude::*,
     window::{CursorGrabMode, PrimaryWindow},
 };
+use bevy_hanabi::prelude::*;
 
 pub mod mesh_gen;
 pub mod ui;
+pub mod vfx;
 
 pub fn run() {
     App::new()
         .add_plugins(DefaultPlugins)
-        .add_systems(Startup, (setup, setup_ui))
+        .add_plugins(HanabiPlugin)
+        .add_systems(Startup, (setup, setup_snow))
         .add_systems(Update, input_handler)
         .run();
 }

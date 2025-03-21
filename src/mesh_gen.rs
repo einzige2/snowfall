@@ -5,13 +5,30 @@ use bevy::{
 use noise::{Fbm, NoiseFn, Perlin};
 use std::cmp::Ordering;
 
+#[derive(Clone)]
 pub enum TerrainResolution {
     LOW = 256,
     MEDIUM = 512,
     HIGH = 1024,
 }
+#[derive(Clone)]
+pub struct TerrainSettings {
+    pub resolution: TerrainResolution,
+    pub size: f64,
+    pub frequency: f64,
+    pub amplitude: f64,
+}
 
-#[derive(Event)]
+#[derive(Clone)]
+pub enum TerrainEventType {
+    Generate,
+    SetResolution,
+    SetSize,
+    SetFrequency,
+    SetAmplitude,
+}
+
+#[derive(Event, Clone)]
 pub enum TerrainEvent {
     Generate,
     SetResolution(TerrainResolution),
