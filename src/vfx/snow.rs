@@ -8,12 +8,21 @@ pub fn setup_snow(
 ) {
     let w = ExprWriter::new();
 
-    let prop_dir = w.add_property("dir", Vec3::new(0.0, -1.0, 0.0).into());
-    let prop_vel = w.add_property("vel", Vec3::new(3.0, 3.0, 3.0).into());
+    let dir = w
+        .rand(VectorType::VEC3F)
+        .mul(w.lit(Vec3::ONE * 2.0))
+        .sub(w.lit(Vec3::ONE));
+
+    let dir_x = dir.clone().mul(w.lit(Vec3::new(1.0, 0.0, 0.0)));
+    let dir_z = dir.mul(w.lit(Vec3::new(0.0, 0.0, 1.0)));
 
     let init_vel = SetAttributeModifier {
         attribute: Attribute::VELOCITY,
-        value: w.prop(prop_dir).mul(w.prop(prop_vel)).expr(),
+        value: w
+            .lit(Vec3::new(0.0, -10.0, 0.0))
+            .add(dir_z)
+            .add(dir_x)
+            .expr(),
     };
 
     let init_pos = SetPositionCircleModifier {
@@ -23,9 +32,19 @@ pub fn setup_snow(
         dimension: ShapeDimension::Volume,
     };
 
+    let init_size = SetAttributeModifier {
+        attribute: Attribute::SIZE,
+        value: w.lit(0.5).expr(),
+    };
+
+    let init_age = SetAttributeModifier {
+        attribute: Attribute::AGE,
+        value: w.lit(0.0).expr(),
+    };
+
     let init_lifetime = SetAttributeModifier {
         attribute: Attribute::LIFETIME,
-        value: w.lit(5.0).expr(),
+        value: w.lit(2.0).expr(),
     };
 
     let init_color = SetAttributeModifier {
@@ -45,23 +64,17 @@ pub fn setup_snow(
             .expr(),
     };
 
-    // Use the F32_0 attribute as a per-particle rotation value, initialized on
-    // spawn and constant after. The rotation angle is in radians, here randomly
-    // selected in [0:2*PI].
-    let rotation = (w.rand(ScalarType::Float) * w.lit(std::f32::consts::TAU)).expr();
-    let init_rotation = SetAttributeModifier::new(Attribute::F32_0, rotation);
-
     let texture_slot = w.lit(0u32).expr();
-    let rotation_attr = w.attr(Attribute::F32_0).expr();
 
     let mut module = w.finish();
     module.add_texture_slot("color");
 
-    let effect = EffectAsset::new(32768, Spawner::rate(50.0.into()), module)
+    let effect = EffectAsset::new(32768, Spawner::rate(200.0.into()), module)
         .with_name("Snowfall")
         .init(init_pos)
-        .init(init_rotation)
         .init(init_vel)
+        .init(init_size)
+        .init(init_age)
         .init(init_lifetime)
         .init(init_color)
         .init(init_sprite_index)
